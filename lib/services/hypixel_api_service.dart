@@ -3,41 +3,27 @@ import 'package:http/http.dart' as http;
 import '../models/skyblock_profile.dart';
 
 class HypixelApiService {
-  // Using SkyShiiyu API (Proxy) which doesn't strictly require a user-provided API key, 
-  // but it's good to keep the signature aligned with the app's credentials.
-  static const String _baseUrl = 'https://sky.shiiyu.moe/api/v2';
+  static const String _baseUrl = 'https://api.hypixel.net';
 
-  Future<List<SkyblockProfile>> getProfiles(String username, String apiKey) async {
-    // Note: In a production app with the official Hypixel API, 
-    // we would use the apiKey as a query parameter or header.
-    // For SkyShiiyu, we proceed with username alone.
-    
+  Future<List<SkyblockProfile>> getProfiles(String uuid, String apiKey) async {
     final response = await http.get(
-      Uri.parse('$_baseUrl/profile/$username'),
+      Uri.parse('$_baseUrl/skyblock/profiles?key=$apiKey&uuid=$uuid'),
     );
 
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
       
-      // SkyShiiyu returns a map of profile IDs to profile data under the 'profiles' key
-      if (jsonResponse is Map<String, dynamic> && jsonResponse.containsKey('profiles')) {
-        final profilesMap = jsonResponse['profiles'] as Map<String, dynamic>;
+      if (jsonResponse['success'] == true && jsonResponse['profiles'] != null) {
+        final List<dynamic> profilesList = jsonResponse['profiles'];
         
-        return profilesMap.entries.map((entry) {
-          final profileData = entry.value as Map<String, dynamic>;
-          return SkyblockProfile(
-            profileId: entry.key,
-            cuteName: profileData['cute_name'] ?? 'Unknown',
-            data: profileData,
-          );
+        return profilesList.map((profileData) {
+          return SkyblockProfile.fromJson(profileData as Map<String, dynamic>);
         }).toList();
       } else {
-        throw Exception('Unexpected API response format');
+        throw Exception('Hypixel API Error: ${jsonResponse['cause'] ?? 'Unknown error'}');
       }
-    } else if (response.statusCode == 404) {
-      throw Exception('User not found or has no public Skyblock profiles. Check if your API settings are on in Hypixel.');
     } else {
-      throw Exception('Failed to connect to Skyblock API (Status: ${response.statusCode})');
+      throw Exception('Failed to connect to Hypixel API (Status: ${response.statusCode})');
     }
   }
 }

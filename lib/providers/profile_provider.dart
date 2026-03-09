@@ -1,11 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../services/hypixel_api_service.dart';
 import '../services/firestore_service.dart';
 import '../models/skyblock_profile.dart';
+import 'current_user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final hypixelApiServiceProvider = Provider((ref) => HypixelApiService());
 final firestoreServiceProvider = Provider((ref) => FirestoreService());
+
+final apiKeyProvider = Provider<String>((ref) {
+  return dotenv.env['HYPIXEL_API_KEY'] ?? '';
+});
 
 class UserCredentials {
   final String? username;
@@ -50,19 +56,20 @@ class CredentialsNotifier extends Notifier<UserCredentials> {
 final credentialsProvider = NotifierProvider<CredentialsNotifier, UserCredentials>(CredentialsNotifier.new);
 
 final skyblockProfilesProvider = FutureProvider<List<SkyblockProfile>>((ref) async {
-  final credentials = ref.watch(credentialsProvider);
-  if (!credentials.isValid) return [];
+  final uuid = ref.watch(currentUserProvider);
+  final apiKey = ref.watch(apiKeyProvider);
+  
+  if (uuid == null || apiKey.isEmpty) return [];
   
   final service = ref.watch(hypixelApiServiceProvider);
   final firestore = ref.watch(firestoreServiceProvider);
   
-  final profiles = await service.getProfiles(credentials.username!, credentials.apiKey!);
+  final profiles = await service.getProfiles(uuid, apiKey);
   
   // Save to Firestore so other users can see/compare (Step 2.4)
   if (profiles.isNotEmpty) {
-    // For MVP, we use username as document ID. 
-    // In production, we'd use Firebase Auth UID.
-    await firestore.saveUserProfile(credentials.username!, profiles.first);
+    // For MVP, we use UUID as document ID if possible, or fallback to username
+    await firestore.saveUserProfile(uuid, profiles.first);
   }
   
   return profiles;

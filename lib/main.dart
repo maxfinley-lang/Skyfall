@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'theme.dart';
-import 'screens/username_entry_screen.dart';
-import 'screens/profile_screen.dart';
+import 'screens/home/username_input_screen.dart';
 import 'providers/profile_provider.dart';
 
 void main() async {
@@ -12,6 +12,12 @@ void main() async {
     await Firebase.initializeApp();
   } catch (e) {
     debugPrint('Firebase initialization failed: $e');
+  }
+  
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    debugPrint('Error loading .env file: $e');
   }
   
   final container = ProviderContainer();
@@ -36,21 +42,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const MainNavigator(),
+      home: const UsernameInputScreen(),
     );
-  }
-}
-
-class MainNavigator extends ConsumerWidget {
-  const MainNavigator({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final credentials = ref.watch(credentialsProvider);
-
-    if (!credentials.isValid) {
-      return const UsernameEntryScreen();
-    }
-    return const ProfileScreen();
   }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/profile_provider.dart';
 import '../providers/navigation_provider.dart';
+import '../models/skyblock_profile.dart';
 import 'leaderboard_screen.dart';
+import 'profile_detail_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -38,7 +40,7 @@ class ProfileScreen extends ConsumerWidget {
       body: pages[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
-        onTap: (index) => ref.read(navigationProvider.notifier).state = index,
+        onTap: (index) => ref.read(navigationProvider.notifier).setIndex(index),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'My Profiles'),
           BottomNavigationBarItem(icon: Icon(Icons.compare_arrows), label: 'Compare'),
@@ -91,84 +93,6 @@ class ProfileScreen extends ConsumerWidget {
           child: Text('Error: $error', textAlign: TextAlign.center, style: const TextStyle(color: Colors.red)),
         ),
       ),
-    );
-  }
-}
-
-class ProfileDetailScreen extends StatelessWidget {
-  final SkyblockProfile profile;
-  const ProfileDetailScreen({super.key, required this.profile});
-
-  @override
-  Widget build(BuildContext context) {
-    // Assuming SkyShiiyu response format
-    final Map<String, dynamic> data = profile.data['data'] ?? {};
-    
-    return Scaffold(
-      appBar: AppBar(title: Text(profile.cuteName)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Profile Data Overview',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            _buildDataSection('Skills', data['skills']),
-            _buildDataSection('Collections', data['collections']),
-            _buildDataSection('Slayers', data['slayers']),
-            _buildDataSection('Dungeons', data['dungeons']),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDataSection(String title, dynamic sectionData) {
-    if (sectionData == null || (sectionData is Map && sectionData.isEmpty)) return Container();
-    
-    final Map<String, dynamic> entries = sectionData is Map ? sectionData as Map<String, dynamic> : {};
-    
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: entries.entries.take(5).map((e) {
-                final val = e.value;
-                String displayVal = '0';
-                if (val is Map) {
-                   displayVal = val['level']?.toString() ?? val['value']?.toString() ?? '0';
-                } else if (val is num) {
-                   displayVal = val.toString();
-                }
-                
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(e.key.replaceAll('_', ' ').toUpperCase()),
-                      Text(displayVal),
-                    ],
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
