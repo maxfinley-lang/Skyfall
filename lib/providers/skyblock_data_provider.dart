@@ -1,0 +1,21 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/skyblock_profile.dart';
+import 'profile_provider.dart';
+
+final skyblockDataProvider = FutureProvider.family<SkyblockProfile, String>((ref, uuid) async {
+  final apiKey = ref.watch(apiKeyProvider);
+  if (apiKey.isEmpty) throw Exception('API Key not found in .env');
+
+  final service = ref.watch(hypixelApiServiceProvider);
+  final profiles = await service.getProfiles(uuid, apiKey);
+
+  if (profiles.isEmpty) {
+    throw Exception('No SkyBlock profiles found for this user.');
+  }
+
+  // Auto-select the active profile (Step 2.2 logic integrated here)
+  return profiles.firstWhere(
+    (p) => p.isActive,
+    orElse: () => profiles.first,
+  );
+});

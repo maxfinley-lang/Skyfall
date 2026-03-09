@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/current_user_provider.dart';
-import '../../providers/profile_provider.dart';
+import '../../providers/skyblock_data_provider.dart';
 import '../../models/skyblock_profile.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -10,24 +10,24 @@ class DashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final uuid = ref.watch(currentUserProvider);
-    final profilesAsync = ref.watch(skyblockProfilesProvider);
+
+    if (uuid == null) {
+      return const Scaffold(
+        body: Center(child: Text('Please log in first.')),
+      );
+    }
+
+    final profileAsync = ref.watch(skyblockDataProvider(uuid));
 
     return Scaffold(
       appBar: AppBar(title: const Text('SkyBlock Dashboard')),
-      body: profilesAsync.when(
-        data: (profiles) {
-          if (profiles.isEmpty) {
-            return const Center(child: Text('No profiles found. Ensure your API settings are on in Hypixel.'));
-          }
-
-          // Step 2.2: Profile Logic - select active profile
-          final activeProfile = profiles.firstWhere(
-            (p) => p.isActive, 
-            orElse: () => profiles.first,
-          );
-
+      body: profileAsync.when(
+        data: (activeProfile) {
           return RefreshIndicator(
-            onRefresh: () async => ref.invalidate(skyblockProfilesProvider),
+            onRefresh: () async {
+              // Step 2.3: Call ref.refresh(skyblockDataProvider(uuid))
+              return ref.refresh(skyblockDataProvider(uuid).future);
+            },
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [

@@ -28,7 +28,7 @@ Step 1.2: Base Architecture
 - Set up the folder structure (models, screens, widgets, services, providers).
 - Wrap MyApp in a ProviderScope.
 
-Phase 2: Milestone 1 - The "Minimum Viable Product" (MVP)
+Phase 2: Milestone 1 - The "Minimm Viable Product" (MVP)
 Goal: A functional read-only dashboard using live Hypixel data.
 
 Step 2.1: User Identification (Username to UUID)
