@@ -19,9 +19,7 @@ class DashboardScreen extends ConsumerWidget {
 
     final profileAsync = ref.watch(skyblockDataProvider(uuid));
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('SkyBlock Dashboard')),
-      body: profileAsync.when(
+    return profileAsync.when(
         data: (activeProfile) {
           return RefreshIndicator(
             onRefresh: () async {
@@ -42,8 +40,7 @@ class DashboardScreen extends ConsumerWidget {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
-      ),
-    );
+      );
   }
 
   Widget _buildHeader(String? uuid, SkyblockProfile profile) {

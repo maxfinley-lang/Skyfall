@@ -18,8 +18,8 @@ Follow these instructions for writing code for my project:
 12 [X] Look through the written code and make sure it is good code
 13 [X] After you write the code check for errors and fix any errors
 
-14 [ ] run through phase 2 step 2.4
-15 [ ] Look through the written code and make sure it is good code
-16 [ ] After you write the code check for errors and fix any errors
+14 [X] run through phase 2 step 2.4
+15 [X] Look through the written code and make sure it is good code
+16 [X] After you write the code check for errors and fix any errors
 
 17 [ ] create test files to test the application

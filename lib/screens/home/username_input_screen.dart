@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/current_user_provider.dart';
-import '../dashboard/dashboard_screen.dart';
+import '../main_navigator.dart';
 
 class UsernameInputScreen extends ConsumerStatefulWidget {
   const UsernameInputScreen({super.key});
@@ -34,7 +34,7 @@ class _UsernameInputScreenState extends ConsumerState<UsernameInputScreen> {
         if (mounted) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const DashboardScreen()),
+            MaterialPageRoute(builder: (context) => const MainNavigator()),
           );
         }
       } else {
