@@ -22,4 +22,5 @@ Follow these instructions for writing code for my project:
 15 [X] Look through the written code and make sure it is good code
 16 [X] After you write the code check for errors and fix any errors
 
-17 [ ] create test files to test the application
+17 [X] create test files to test the application
+18 [ ] Test api key fetching

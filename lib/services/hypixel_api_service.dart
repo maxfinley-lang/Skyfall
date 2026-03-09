@@ -4,9 +4,12 @@ import '../models/skyblock_profile.dart';
 
 class HypixelApiService {
   static const String _baseUrl = 'https://api.hypixel.net';
+  final http.Client _client;
+
+  HypixelApiService({http.Client? client}) : _client = client ?? http.Client();
 
   Future<List<SkyblockProfile>> getProfiles(String uuid, String apiKey) async {
-    final response = await http.get(
+    final response = await _client.get(
       Uri.parse('$_baseUrl/skyblock/profiles?key=$apiKey&uuid=$uuid'),
     );
 

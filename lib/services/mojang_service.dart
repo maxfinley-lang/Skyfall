@@ -3,10 +3,13 @@ import 'package:http/http.dart' as http;
 
 class MojangService {
   static const String _baseUrl = 'https://api.mojang.com/users/profiles/minecraft';
+  final http.Client _client;
+
+  MojangService({http.Client? client}) : _client = client ?? http.Client();
 
   Future<String?> getUuid(String username) async {
     try {
-      final response = await http.get(Uri.parse('$_baseUrl/$username'));
+      final response = await _client.get(Uri.parse('$_baseUrl/$username'));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
