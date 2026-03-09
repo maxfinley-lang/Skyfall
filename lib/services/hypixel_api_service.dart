@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/skyblock_profile.dart';
 
 class HypixelApiService {
-  static const String _baseUrl = 'https://api.hypixel.net';
+  static const String _baseUrl = 'https://api.hypixel.net/v2';
   final http.Client _client;
 
   HypixelApiService({http.Client? client}) : _client = client ?? http.Client();

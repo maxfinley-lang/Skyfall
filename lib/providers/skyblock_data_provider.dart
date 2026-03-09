@@ -6,6 +6,9 @@ final skyblockDataProvider = FutureProvider.family<SkyblockProfile, String>((ref
   final apiKey = ref.watch(apiKeyProvider);
   if (apiKey.isEmpty) throw Exception('API Key not found in .env');
 
+  // DEBUG PRINT for API Key testing
+  print('DEBUG: Using API Key: ${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)} for UUID: $uuid');
+
   final service = ref.watch(hypixelApiServiceProvider);
   final profiles = await service.getProfiles(uuid, apiKey);
 
