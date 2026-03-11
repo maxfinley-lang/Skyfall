@@ -23,4 +23,7 @@ Follow these instructions for writing code for my project:
 16 [X] After you write the code check for errors and fix any errors
 
 17 [X] create test files to test the application
-18 [ ] Test api key fetching
+18 [X] Test api key fetching
+
+19 [ ] current project state allows for user to enter username, then the 'login' occurs,
+however upon 
