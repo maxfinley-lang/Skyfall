@@ -31,9 +31,33 @@ class DashboardScreen extends ConsumerWidget {
               children: [
                 _buildHeader(uuid, activeProfile),
                 const SizedBox(height: 24),
-                _buildSkillCard('Combat', activeProfile.combatLvl, Icons.shield),
-                _buildSkillCard('Mining', activeProfile.miningLvl, Icons.precision_manufacturing),
-                _buildSkillCard('Catacombs', activeProfile.catacombsLvl, Icons.castle),
+                const Text(
+                  'Skill Levels',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 3,
+                  children: [
+                    _buildSkillCard('Combat', activeProfile.combatLvl, Icons.shield),
+                    _buildSkillCard('Mining', activeProfile.miningLvl, Icons.precision_manufacturing),
+                    _buildSkillCard('Farming', activeProfile.farmingLvl, Icons.agriculture),
+                    _buildSkillCard('Foraging', activeProfile.foragingLvl, Icons.park),
+                    _buildSkillCard('Fishing', activeProfile.fishingLvl, Icons.phishing),
+                    _buildSkillCard('Enchanting', activeProfile.enchantingLvl, Icons.auto_stories),
+                    _buildSkillCard('Alchemy', activeProfile.alchemyLvl, Icons.science),
+                    _buildSkillCard('Taming', activeProfile.tamingLvl, Icons.pets),
+                    _buildSkillCard('Catacombs', activeProfile.catacombsLvl, Icons.castle),
+                    _buildSkillCard('Carpentry', activeProfile.carpentryLvl, Icons.construction),
+                    _buildSkillCard('Runecrafting', activeProfile.runecraftingLvl, Icons.diamond),
+                    _buildSkillCard('Social', activeProfile.socialLvl, Icons.groups),
+                  ],
+                ),
               ],
             ),
           );
@@ -83,13 +107,25 @@ class DashboardScreen extends ConsumerWidget {
 
   Widget _buildSkillCard(String skill, int level, IconData icon) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: Icon(icon, color: Colors.deepPurple),
-        title: Text(skill, style: const TextStyle(fontWeight: FontWeight.bold)),
-        trailing: Text(
-          'Lvl $level',
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.deepPurple, size: 20),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                skill,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Text(
+              'Lvl $level',
+              style: const TextStyle(fontSize: 12),
+            ),
+          ],
         ),
       ),
     );
