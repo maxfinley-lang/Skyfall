@@ -25,5 +25,4 @@ Follow these instructions for writing code for my project:
 17 [X] create test files to test the application
 18 [X] Test api key fetching
 
-19 [ ] current project state allows for user to enter username, then the 'login' occurs,
-however upon 
+19 [ ] i want you to add in the other skills that are in the game(Farming, Mining, Combat, Foraging, Fishing, Enchanting, Alchemy, Taming, Dungeoneering, Carpentry, Runecrafting, social)
