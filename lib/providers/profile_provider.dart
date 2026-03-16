@@ -57,22 +57,32 @@ final credentialsProvider = NotifierProvider<CredentialsNotifier, UserCredential
 
 final skyblockProfilesProvider = FutureProvider<List<SkyblockProfile>>((ref) async {
   final uuid = ref.watch(currentUserProvider);
-  final apiKey = ref.watch(apiKeyProvider);
+  final apiKey = ref.watch(apiKeyProvider).trim();
   
-  if (uuid == null || apiKey.isEmpty) return [];
+  if (uuid == null || apiKey.isEmpty) {
+    return [SkyblockProfile.mock()];
+  }
   
   final service = ref.watch(hypixelApiServiceProvider);
   final firestore = ref.watch(firestoreServiceProvider);
   
-  final profiles = await service.getProfiles(uuid, apiKey);
-  
-  // Save to Firestore so other users can see/compare (Step 2.4)
-  if (profiles.isNotEmpty) {
-    // For MVP, we use UUID as document ID if possible, or fallback to username
-    await firestore.saveUserProfile(uuid, profiles.first);
+  try {
+    final profiles = await service.getProfiles(uuid, apiKey);
+    
+    if (profiles.isEmpty) {
+      return [SkyblockProfile.mock()];
+    }
+
+    // Save to Firestore so other users can see/compare (Step 2.4)
+    if (profiles.isNotEmpty) {
+      // For MVP, we use UUID as document ID if possible, or fallback to username
+      await firestore.saveUserProfile(uuid, profiles.first);
+    }
+    
+    return profiles;
+  } catch (e) {
+    return [SkyblockProfile.mock()];
   }
-  
-  return profiles;
 });
 
 final allUsersProfilesProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {

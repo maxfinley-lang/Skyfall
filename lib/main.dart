@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'theme.dart';
-import 'screens/home/username_input_screen.dart';
+import 'screens/main_navigator.dart';
 import 'providers/profile_provider.dart';
 import 'firebase_options.dart';
 
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const UsernameInputScreen(),
+      home: const MainNavigator(),
     );
   }
 }

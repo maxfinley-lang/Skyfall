@@ -32,10 +32,10 @@ Phase 2: Milestone 1 - The "Minimstexm Viable Product" (MVP)
 Goal: A functional read-only dashboard using live Hypixel data.
 
 Step 2.1: User Identification (Username to UUID)
-Dependencies: Add http and flutter_dotenv (for securing your API key) to pubspec.yaml.
+Dependencies: Add http and flutter_dotenv to pubspec.yaml.
 API Key Setup:
-Obtain your key from the Hypixel Developer Dashboard.
-Create a .env file to store HYPIXEL_API_KEY=your_key_here.
+All we need is user to enable API feautres and them to enter their username
+
 Mojang Service:
 Create services/mojang_service.dart.
 Implement getUuid(String username) using the endpoint: https://api.mojang.com/users/profiles/minecraft/{username}.
@@ -47,7 +47,7 @@ On submit: Call getUuid, store the returned UUID in a Riverpod provider (current
 Step 2.2: Fetching & Displaying SkyBlock Data
 Hypixel Service:
 Create services/hypixel_service.dart.
-Implement getSkyblockProfiles(String uuid) using: https://api.hypixel.net{YOUR_KEY}&uuid={USER_UUID}.
+Implement getSkyblockProfiles(String uuid) using: https://api.hypixel.net&uuid={USER_UUID}.
 Data Models (The hard part):
 Create models/skyblock_profile.dart.
 You must parse the raw JSON. Focus on:
@@ -61,7 +61,7 @@ Dashboard UI:
 Create screens/dashboard/dashboard_screen.dart.
 Display a ListView or GridView showing:
 Header: Player Head (Use https://crafatar.com{UUID}), Username, and Active Profile Name.
-Cards: Combat Lvl, Mining Lvl, Catacombs Lvl (Dungeons). 
+Cards: (Farming, Mining, Combat, Foraging, Fishing, Enchanting, Alchemy, Taming, Dungeoneering, Carpentry, Runecrafting, social) 
 
 Step 2.3: State Management & Refresh
 Providers:
@@ -85,6 +85,8 @@ Create a StatRow widget that accepts valueA (User) and valueB (Opponent).
 If valueA > valueB, color A green and B red.
 Example:
 Combat: You (25) vs. Opponent (50) -> [Red/Green indicators]
+
+step 2.5: 
 
 
 

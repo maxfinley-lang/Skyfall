@@ -5,7 +5,7 @@ final mojangServiceProvider = Provider<MojangService>((ref) => MojangService());
 
 class CurrentUserNotifier extends Notifier<String?> {
   @override
-  String? build() => null;
+  String? build() => 'mock-150-uuid';
 
   void setUuid(String? uuid) {
     state = uuid;

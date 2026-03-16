@@ -4,8 +4,13 @@ import '../models/skyblock_profile.dart';
 import 'profile_provider.dart';
 
 final skyblockDataProvider = FutureProvider.family<SkyblockProfile, String>((ref, uuid) async {
-  final apiKey = ref.watch(apiKeyProvider);
-  if (apiKey.isEmpty) throw Exception('API Key not found in .env');
+  final apiKey = ref.watch(apiKeyProvider).trim();
+  
+  // If no API Key is found, return the mock directly as requested (hardcoded fallback)
+  if (apiKey.isEmpty) {
+    debugPrint('DEBUG: No API Key found, returning Mock Profile.');
+    return SkyblockProfile.mock();
+  }
 
   // DEBUG PRINT for API Key testing
   debugPrint('DEBUG: Using API Key: ${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)} for UUID: $uuid');
@@ -15,7 +20,7 @@ final skyblockDataProvider = FutureProvider.family<SkyblockProfile, String>((ref
     final profiles = await service.getProfiles(uuid, apiKey);
 
     if (profiles.isEmpty) {
-      throw Exception('No SkyBlock profiles found for this user.');
+      return SkyblockProfile.mock();
     }
 
     // Auto-select the active profile (Step 2.2 logic integrated here)
@@ -24,7 +29,7 @@ final skyblockDataProvider = FutureProvider.family<SkyblockProfile, String>((ref
       orElse: () => profiles.first,
     );
   } catch (e) {
-    debugPrint('ERROR: Failed to fetch profiles from Hypixel: $e');
-    rethrow;
+    debugPrint('ERROR: Failed to fetch profiles from Hypixel, using mock fallback: $e');
+    return SkyblockProfile.mock();
   }
 });

@@ -58,6 +58,8 @@ class DashboardScreen extends ConsumerWidget {
                     _buildSkillCard('Social', activeProfile.socialLvl, Icons.groups),
                   ],
                 ),
+                const SizedBox(height: 24),
+                _buildAccessoryBag(activeProfile),
               ],
             ),
           );
@@ -65,6 +67,55 @@ class DashboardScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
       );
+  }
+
+  Widget _buildAccessoryBag(SkyblockProfile profile) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Accessory Bag',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.deepPurple,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '${profile.talismanCount} Talismans',
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        if (profile.talismans.isNotEmpty)
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: profile.talismans.map((t) => ActionChip(
+              label: Text(t, style: const TextStyle(fontSize: 12)),
+              backgroundColor: Colors.deepPurple.withValues(alpha: 0.1),
+              side: BorderSide(color: Colors.deepPurple.withValues(alpha: 0.3)),
+              onPressed: () {
+                _showTalismanDetails(context, t);
+              },
+            )).toList(),
+          )
+        else
+          const Card(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('No talismans found or API data restricted.'),
+            ),
+          ),
+      ],
+    );
   }
 
   Widget _buildHeader(String? uuid, SkyblockProfile profile) {
@@ -88,13 +139,33 @@ class DashboardScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    children: [
+                      Text(
+                        profile.cuteName,
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.amber[700],
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          'SB Lvl ${profile.skyblockLevel.toInt()}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   Text(
                     'Active Profile',
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
-                  ),
-                  Text(
-                    profile.cuteName,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -127,6 +198,39 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showTalismanDetails(BuildContext context, String name) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(name),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Rarity: Legendary',
+              style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text('Power: +10 Strength'),
+            const Text('Power: +5 Critical Damage'),
+            const SizedBox(height: 12),
+            Text(
+              'This accessory provides unique bonuses to your SkyBlock stats while in your bag.',
+              style: TextStyle(color: Colors.grey[600], fontSize: 13),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
       ),
     );
   }

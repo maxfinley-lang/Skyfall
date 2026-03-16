@@ -25,8 +25,10 @@ Follow these instructions for writing code for my project:
 17 [X] create test files to test the application
 18 [X] Test api key fetching
 
-19 [ ] the skills show up but there is no user data, lets first hardcode an average skyblock level 150 player
+19 [X] the skills show up but there is no user data, lets first hardcode an average skyblock level 150 player
 
-20 [ ] add in accesseroy bag with added talismans
+20 [X] add in accesseroy bag with added talismans
+ for an average lvl 150 player
 
-21 [ ] add 
+21 [X] add SkyBlock Level display to dashboard and comparison
+ 

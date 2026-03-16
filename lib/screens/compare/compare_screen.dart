@@ -97,6 +97,11 @@ class _CompareScreenState extends ConsumerState<CompareScreen> {
                             ),
                             const SizedBox(height: 16),
                             StatRow(
+                              label: 'SkyBlock Level',
+                              valueA: userProfile.skyblockLevel.toInt(),
+                              valueB: opponentProfile.skyblockLevel.toInt(),
+                            ),
+                            StatRow(
                               label: 'Combat Level',
                               valueA: userProfile.combatLvl,
                               valueB: opponentProfile.combatLvl,
