@@ -5,11 +5,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'theme.dart';
 import 'screens/home/username_input_screen.dart';
 import 'providers/profile_provider.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   } catch (e) {
     debugPrint('Firebase initialization failed: $e');
   }

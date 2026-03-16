@@ -107,9 +107,54 @@ class _CompareScreenState extends ConsumerState<CompareScreen> {
                               valueB: opponentProfile.miningLvl,
                             ),
                             StatRow(
+                              label: 'Farming Level',
+                              valueA: userProfile.farmingLvl,
+                              valueB: opponentProfile.farmingLvl,
+                            ),
+                            StatRow(
+                              label: 'Foraging Level',
+                              valueA: userProfile.foragingLvl,
+                              valueB: opponentProfile.foragingLvl,
+                            ),
+                            StatRow(
+                              label: 'Fishing Level',
+                              valueA: userProfile.fishingLvl,
+                              valueB: opponentProfile.fishingLvl,
+                            ),
+                            StatRow(
+                              label: 'Enchanting Level',
+                              valueA: userProfile.enchantingLvl,
+                              valueB: opponentProfile.enchantingLvl,
+                            ),
+                            StatRow(
+                              label: 'Alchemy Level',
+                              valueA: userProfile.alchemyLvl,
+                              valueB: opponentProfile.alchemyLvl,
+                            ),
+                            StatRow(
+                              label: 'Taming Level',
+                              valueA: userProfile.tamingLvl,
+                              valueB: opponentProfile.tamingLvl,
+                            ),
+                            StatRow(
                               label: 'Catacombs Level',
                               valueA: userProfile.catacombsLvl,
                               valueB: opponentProfile.catacombsLvl,
+                            ),
+                            StatRow(
+                              label: 'Carpentry Level',
+                              valueA: userProfile.carpentryLvl,
+                              valueB: opponentProfile.carpentryLvl,
+                            ),
+                            StatRow(
+                              label: 'Runecrafting Level',
+                              valueA: userProfile.runecraftingLvl,
+                              valueB: opponentProfile.runecraftingLvl,
+                            ),
+                            StatRow(
+                              label: 'Social Level',
+                              valueA: userProfile.socialLvl,
+                              valueB: opponentProfile.socialLvl,
                             ),
                           ],
                         );

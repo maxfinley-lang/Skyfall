@@ -11,15 +11,20 @@ final skyblockDataProvider = FutureProvider.family<SkyblockProfile, String>((ref
   debugPrint('DEBUG: Using API Key: ${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)} for UUID: $uuid');
 
   final service = ref.watch(hypixelApiServiceProvider);
-  final profiles = await service.getProfiles(uuid, apiKey);
+  try {
+    final profiles = await service.getProfiles(uuid, apiKey);
 
-  if (profiles.isEmpty) {
-    throw Exception('No SkyBlock profiles found for this user.');
+    if (profiles.isEmpty) {
+      throw Exception('No SkyBlock profiles found for this user.');
+    }
+
+    // Auto-select the active profile (Step 2.2 logic integrated here)
+    return profiles.firstWhere(
+      (p) => p.isActive,
+      orElse: () => profiles.first,
+    );
+  } catch (e) {
+    debugPrint('ERROR: Failed to fetch profiles from Hypixel: $e');
+    rethrow;
   }
-
-  // Auto-select the active profile (Step 2.2 logic integrated here)
-  return profiles.firstWhere(
-    (p) => p.isActive,
-    orElse: () => profiles.first,
-  );
 });

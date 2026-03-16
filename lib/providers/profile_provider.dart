@@ -10,7 +10,7 @@ final hypixelApiServiceProvider = Provider((ref) => HypixelApiService());
 final firestoreServiceProvider = Provider((ref) => FirestoreService());
 
 final apiKeyProvider = Provider<String>((ref) {
-  return dotenv.env['HYPIXEL_API_KEY'] ?? '';
+  return (dotenv.env['HYPIXEL_API_KEY'] ?? '').trim();
 });
 
 class UserCredentials {

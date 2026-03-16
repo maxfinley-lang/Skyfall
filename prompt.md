@@ -25,4 +25,8 @@ Follow these instructions for writing code for my project:
 17 [X] create test files to test the application
 18 [X] Test api key fetching
 
-19 [ ] i want you to add in the other skills that are in the game(Farming, Mining, Combat, Foraging, Fishing, Enchanting, Alchemy, Taming, Dungeoneering, Carpentry, Runecrafting, social)
+19 [ ] the skills show up but there is no user data, lets first hardcode an average skyblock level 150 player
+
+20 [ ] add in accesseroy bag with added talismans
+
+21 [ ] add 

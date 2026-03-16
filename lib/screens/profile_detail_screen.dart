@@ -27,16 +27,29 @@ class ProfileDetailScreen extends StatelessWidget {
               'Selected': data['selected']?.toString() ?? 'false',
               'Last Save': data['last_save']?.toString() ?? 'N/A',
             }),
+            const SizedBox(height: 16),
+            _buildDataSection('Skill Levels', {
+              'Combat': profile.combatLvl,
+              'Mining': profile.miningLvl,
+              'Farming': profile.farmingLvl,
+              'Foraging': profile.foragingLvl,
+              'Fishing': profile.fishingLvl,
+              'Enchanting': profile.enchantingLvl,
+              'Alchemy': profile.alchemyLvl,
+              'Taming': profile.tamingLvl,
+              'Catacombs': profile.catacombsLvl,
+              'Carpentry': profile.carpentryLvl,
+              'Runecrafting': profile.runecraftingLvl,
+              'Social': profile.socialLvl,
+            }),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDataSection(String title, dynamic sectionData) {
-    if (sectionData == null || (sectionData is Map && sectionData.isEmpty)) return Container();
-    
-    final Map<String, dynamic> entries = sectionData is Map ? sectionData as Map<String, dynamic> : {};
+  Widget _buildDataSection(String title, Map<String, dynamic> entries) {
+    if (entries.isEmpty) return Container();
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,21 +65,16 @@ class ProfileDetailScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
-              children: entries.entries.take(5).map((e) {
+              children: entries.entries.map((e) {
                 final val = e.value;
-                String displayVal = '0';
-                if (val is Map) {
-                   displayVal = val['level']?.toString() ?? val['value']?.toString() ?? '0';
-                } else if (val is num) {
-                   displayVal = val.toString();
-                }
+                String displayVal = val.toString();
                 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(e.key.replaceAll('_', ' ').toUpperCase()),
+                      Text(e.key.toUpperCase()),
                       Text(displayVal),
                     ],
                   ),
