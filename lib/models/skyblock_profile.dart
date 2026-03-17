@@ -1,3 +1,19 @@
+class Pet {
+  final String name;
+  final String rarity;
+  final int level;
+  final List<String> skills;
+  final bool active;
+
+  Pet({
+    required this.name,
+    required this.rarity,
+    required this.level,
+    required this.skills,
+    this.active = false,
+  });
+}
+
 class SkyblockProfile {
   final String profileId;
   final String cuteName;
@@ -17,6 +33,7 @@ class SkyblockProfile {
   final int socialLvl;
   final List<String> talismans;
   final int talismanCount;
+  final List<Pet> pets;
   final bool isActive;
 
   SkyblockProfile({
@@ -38,6 +55,7 @@ class SkyblockProfile {
     this.socialLvl = 0,
     this.talismans = const [],
     this.talismanCount = 0,
+    this.pets = const [],
     this.isActive = false,
   });
 
@@ -75,6 +93,7 @@ class SkyblockProfile {
       catacombsLvl: calculateLevel((firstMember['dungeons']?['dungeon_types']?['catacombs']?['experience'] as num?)?.toDouble()),
       talismans: [], // Requires NBT decoding for real data
       talismanCount: talismanBag != null ? 1 : 0, // Simplified placeholder
+      pets: [], // Requires parsing for real data
       isActive: json['selected'] ?? false,
     );
   }
@@ -98,16 +117,51 @@ class SkyblockProfile {
       runecraftingLvl: 25,
       socialLvl: 15,
       talismans: [
-        'Hegemony Artifact',
-        'Auto-Recombobulator',
-        'Wither Artifact',
-        'Seal of the Family',
-        'End Game Artifact',
-        'Ender Artifact',
-        'Bat Artifact',
-        'Cheetah Talisman',
+        'Hegemony Artifact', 'Auto-Recombobulator', 'Wither Artifact', 'Seal of the Family',
+        'End Game Artifact', 'Ender Artifact', 'Bat Artifact', 'Cheetah Talisman',
+        'Frozen Chicken', 'King Bait', 'Great Spook Artifact', 'Nether Artifact',
+        'Candy Relic', 'Dante Talisman', 'Campfire God Badge', 'Personal Deletor 7000',
+        'Personal Compactor 7000', 'Ring of Love', 'Experience Artifact', 'Artifact of Control',
+        'Beastmaster Crest', 'Cat Talisman', 'Wood Affinity Talisman', 'Zombie Artifact',
+        'Spider Artifact', 'Tarantula Talisman', 'Survivor Cube', 'Melody\'s Hair',
+        'Day Crystal', 'Night Crystal', 'Devour Ring', 'Piggy Bank',
+        'Wolf Paw', 'Graveyard Talisman', 'Potion Badge', 'Magnetic Talisman',
+        'Village Affinity Talisman', 'Mine Affinity Talisman', 'Intimidation Artifact', 'Scavenger Talisman',
+        'Fire Talisman', 'Vaccine Talisman', 'Farmer Orb', 'Talent Tincture',
+        'Speed Talisman', 'Feather Artifact', 'Sea Creature Talisman', 'Healing Talisman',
+        'Haste Ring', 'Red Claw Artifact', 'Hunter Talisman', 'Bait Ring',
+        'Spiked Atrocity', 'Mineral Talisman', 'Titanium Talisman', 'Jerry Artifact',
+        'Candy Artifact', 'New Year Cake Bag', 'Compass Talisman', 'Zombie Ring',
+        'Spider Ring', 'Wolf Ring', 'Bat Ring', 'Devour Talisman'
       ],
       talismanCount: 64,
+      pets: [
+        Pet(
+          name: 'Golden Dragon',
+          rarity: 'LEGENDARY',
+          level: 200,
+          skills: ['Gold Fusion', 'Dragon-Slayer', 'Legendary Power'],
+          active: true,
+        ),
+        Pet(
+          name: 'Ender Dragon',
+          rarity: 'LEGENDARY',
+          level: 100,
+          skills: ['End-Slayer', 'One with the Dragon', 'Superior'],
+        ),
+        Pet(
+          name: 'Blue Whale',
+          rarity: 'LEGENDARY',
+          level: 100,
+          skills: ['Ingest', 'Bulk', 'Archimedes'],
+        ),
+        Pet(
+          name: 'Wither Skeleton',
+          rarity: 'LEGENDARY',
+          level: 100,
+          skills: ['Stronger Bones', 'Wither Resistance', 'Death\'s Touch'],
+        ),
+      ],
       isActive: true,
     );
   }

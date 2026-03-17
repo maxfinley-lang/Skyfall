@@ -59,7 +59,9 @@ class DashboardScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 24),
-                _buildAccessoryBag(activeProfile),
+                _buildPetsSection(context, activeProfile),
+                const SizedBox(height: 24),
+                _buildAccessoryBag(context, activeProfile),
               ],
             ),
           );
@@ -69,7 +71,116 @@ class DashboardScreen extends ConsumerWidget {
       );
   }
 
-  Widget _buildAccessoryBag(SkyblockProfile profile) {
+  Widget _buildPetsSection(BuildContext context, SkyblockProfile profile) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Pets',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        if (profile.pets.isNotEmpty)
+          SizedBox(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: profile.pets.length,
+              itemBuilder: (context, index) {
+                final pet = profile.pets[index];
+                return GestureDetector(
+                  onTap: () => _showPetDetails(context, pet),
+                  child: Card(
+                    color: pet.active ? Colors.deepPurple.withValues(alpha: 0.1) : null,
+                    child: Container(
+                      width: 110,
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.pets,
+                            color: _getRarityColor(pet.rarity),
+                            size: 24,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            pet.name,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            'Lvl ${pet.level}',
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        else
+          const Card(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('No pets found.'),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Color _getRarityColor(String rarity) {
+    switch (rarity.toUpperCase()) {
+      case 'COMMON': return Colors.grey;
+      case 'UNCOMMON': return Colors.green;
+      case 'RARE': return Colors.blue;
+      case 'EPIC': return Colors.purple;
+      case 'LEGENDARY': return Colors.orange;
+      case 'MYTHIC': return Colors.pink;
+      default: return Colors.grey;
+    }
+  }
+
+  void _showPetDetails(BuildContext context, Pet pet) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('${pet.name} [Lvl ${pet.level}]'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Rarity: ${pet.rarity}',
+              style: TextStyle(color: _getRarityColor(pet.rarity), fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Skills:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            ...pet.skills.map((skill) => Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Text('• $skill'),
+            )),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAccessoryBag(BuildContext context, SkyblockProfile profile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -95,17 +206,31 @@ class DashboardScreen extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         if (profile.talismans.isNotEmpty)
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: profile.talismans.map((t) => ActionChip(
-              label: Text(t, style: const TextStyle(fontSize: 12)),
-              backgroundColor: Colors.deepPurple.withValues(alpha: 0.1),
-              side: BorderSide(color: Colors.deepPurple.withValues(alpha: 0.3)),
-              onPressed: () {
-                _showTalismanDetails(context, t);
-              },
-            )).toList(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: profile.talismans.take(8).map((t) => ActionChip(
+                  label: Text(t, style: const TextStyle(fontSize: 12)),
+                  backgroundColor: Colors.deepPurple.withValues(alpha: 0.1),
+                  side: BorderSide(color: Colors.deepPurple.withValues(alpha: 0.3)),
+                  onPressed: () {
+                    _showTalismanDetails(context, t);
+                  },
+                )).toList(),
+              ),
+              if (profile.talismans.length > 8)
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: TextButton.icon(
+                    onPressed: () => _showAllTalismans(context, profile.talismans),
+                    icon: const Icon(Icons.grid_view, size: 16),
+                    label: Text('See all ${profile.talismans.length} accessories'),
+                  ),
+                ),
+            ],
           )
         else
           const Card(
@@ -198,6 +323,38 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showAllTalismans(BuildContext context, List<String> talismans) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Accessory Bag (${talismans.length})'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: SingleChildScrollView(
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: talismans.map((t) => ActionChip(
+                label: Text(t, style: const TextStyle(fontSize: 12)),
+                backgroundColor: Colors.deepPurple.withValues(alpha: 0.1),
+                onPressed: () {
+                  Navigator.pop(context);
+                  _showTalismanDetails(context, t);
+                },
+              )).toList(),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
       ),
     );
   }

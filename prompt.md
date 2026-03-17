@@ -30,5 +30,10 @@ Follow these instructions for writing code for my project:
 20 [X] add in accesseroy bag with added talismans
  for an average lvl 150 player
 
-21 [X] add SkyBlock Level display to dashboard and comparison
- 
+21 [X] make the talisman interactive, showing what they dom what they cost, and their rarirty
+
+22 [X] add in pets with an arranage ment of hardcoded pets, their rarity, and their skills
+
+23 [X] make it so when i click on accessery in the talisman area, it shows al 64 talisman
+
+24 [ ] Now that the
