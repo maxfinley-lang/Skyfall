@@ -14,26 +14,59 @@ class Pet {
   });
 }
 
+class SlayerProgress {
+  final int zombie;
+  final int spider;
+  final int wolf;
+  final int enderman;
+  final int blaze;
+  final int vampire;
+
+  SlayerProgress({
+    this.zombie = 0,
+    this.spider = 0,
+    this.wolf = 0,
+    this.enderman = 0,
+    this.blaze = 0,
+    this.vampire = 0,
+  });
+}
+
+class Skill {
+  final int level;
+  final double currentXp;
+  final double maxXp;
+
+  Skill({
+    required this.level,
+    required this.currentXp,
+    required this.maxXp,
+  });
+
+  double get progress => (currentXp / maxXp).clamp(0.0, 1.0);
+}
+
 class SkyblockProfile {
   final String profileId;
   final String cuteName;
   final Map<String, dynamic> data;
   final double skyblockLevel;
-  final int combatLvl;
-  final int miningLvl;
-  final int farmingLvl;
-  final int foragingLvl;
-  final int fishingLvl;
-  final int enchantingLvl;
-  final int alchemyLvl;
-  final int tamingLvl;
-  final int catacombsLvl;
-  final int carpentryLvl;
-  final int runecraftingLvl;
-  final int socialLvl;
+  final Skill combatLvl;
+  final Skill miningLvl;
+  final Skill farmingLvl;
+  final Skill foragingLvl;
+  final Skill fishingLvl;
+  final Skill enchantingLvl;
+  final Skill alchemyLvl;
+  final Skill tamingLvl;
+  final Skill catacombsLvl;
+  final Skill carpentryLvl;
+  final Skill runecraftingLvl;
+  final Skill socialLvl;
   final List<String> talismans;
   final int talismanCount;
   final List<Pet> pets;
+  final SlayerProgress slayers;
   final bool isActive;
 
   SkyblockProfile({
@@ -41,30 +74,39 @@ class SkyblockProfile {
     required this.cuteName,
     required this.data,
     this.skyblockLevel = 0,
-    this.combatLvl = 0,
-    this.miningLvl = 0,
-    this.farmingLvl = 0,
-    this.foragingLvl = 0,
-    this.fishingLvl = 0,
-    this.enchantingLvl = 0,
-    this.alchemyLvl = 0,
-    this.tamingLvl = 0,
-    this.catacombsLvl = 0,
-    this.carpentryLvl = 0,
-    this.runecraftingLvl = 0,
-    this.socialLvl = 0,
+    required this.combatLvl,
+    required this.miningLvl,
+    required this.farmingLvl,
+    required this.foragingLvl,
+    required this.fishingLvl,
+    required this.enchantingLvl,
+    required this.alchemyLvl,
+    required this.tamingLvl,
+    required this.catacombsLvl,
+    required this.carpentryLvl,
+    required this.runecraftingLvl,
+    required this.socialLvl,
     this.talismans = const [],
     this.talismanCount = 0,
     this.pets = const [],
+    SlayerProgress? slayers,
     this.isActive = false,
-  });
+  }) : slayers = slayers ?? SlayerProgress();
 
   factory SkyblockProfile.fromJson(Map<String, dynamic> json) {
     // Basic level calculation
-    int calculateLevel(double? xp) {
-      if (xp == null) return 0;
-      // Basic level calculation: roughly XP/1M up to 60 for MVP simplicity
-      return (xp / 1000000).clamp(0, 60).toInt();
+    Skill calculateSkill(double? totalXp) {
+      if (totalXp == null) return Skill(level: 0, currentXp: 0, maxXp: 1000000);
+      
+      // For MVP simplicity, every level is 1M XP. 
+      // Real SkyBlock XP tables are complex, but this satisfies the UI requirement.
+      int level = (totalXp / 1000000).floor().clamp(0, 60);
+      double currentXp = totalXp % 1000000;
+      return Skill(
+        level: level,
+        currentXp: currentXp,
+        maxXp: 1000000,
+      );
     }
 
     final members = json['members'] as Map<String, dynamic>? ?? {};
@@ -73,27 +115,52 @@ class SkyblockProfile {
     // For MVP, we'll try to get the count from the bag if it exists as a simple field,
     // though usually it requires NBT parsing. We'll use a fallback for now.
     final talismanBag = firstMember['talisman_bag'] as Map<String, dynamic>?;
+
+    final slayerData = firstMember['slayer_bosses'] as Map<String, dynamic>? ?? {};
+    
+    int getSlayerLvl(String boss) {
+      final xp = slayerData[boss]?['xp'] as num? ?? 0;
+      // Very rough slayer level estimation (0-9)
+      if (xp >= 1000000) return 9;
+      if (xp >= 400000) return 8;
+      if (xp >= 100000) return 7;
+      if (xp >= 20000) return 6;
+      if (xp >= 5000) return 5;
+      if (xp >= 1500) return 4;
+      if (xp >= 250) return 3;
+      if (xp >= 15) return 2;
+      if (xp >= 5) return 1;
+      return 0;
+    }
     
     return SkyblockProfile(
       profileId: json['profile_id'] ?? '',
       cuteName: json['cute_name'] ?? 'Unknown',
       data: json,
       skyblockLevel: (firstMember['leveling']?['experience'] as num? ?? 0) / 100.0,
-      combatLvl: calculateLevel((firstMember['experience_skill_combat'] as num?)?.toDouble()),
-      miningLvl: calculateLevel((firstMember['experience_skill_mining'] as num?)?.toDouble()),
-      farmingLvl: calculateLevel((firstMember['experience_skill_farming'] as num?)?.toDouble()),
-      foragingLvl: calculateLevel((firstMember['experience_skill_foraging'] as num?)?.toDouble()),
-      fishingLvl: calculateLevel((firstMember['experience_skill_fishing'] as num?)?.toDouble()),
-      enchantingLvl: calculateLevel((firstMember['experience_skill_enchanting'] as num?)?.toDouble()),
-      alchemyLvl: calculateLevel((firstMember['experience_skill_alchemy'] as num?)?.toDouble()),
-      tamingLvl: calculateLevel((firstMember['experience_skill_taming'] as num?)?.toDouble()),
-      carpentryLvl: calculateLevel((firstMember['experience_skill_carpentry'] as num?)?.toDouble()),
-      runecraftingLvl: calculateLevel((firstMember['experience_skill_runecrafting'] as num?)?.toDouble()),
-      socialLvl: calculateLevel((firstMember['experience_skill_social2'] as num?)?.toDouble()),
-      catacombsLvl: calculateLevel((firstMember['dungeons']?['dungeon_types']?['catacombs']?['experience'] as num?)?.toDouble()),
+      combatLvl: calculateSkill((firstMember['experience_skill_combat'] as num?)?.toDouble()),
+      miningLvl: calculateSkill((firstMember['experience_skill_mining'] as num?)?.toDouble()),
+      farmingLvl: calculateSkill((firstMember['experience_skill_farming'] as num?)?.toDouble()),
+      foragingLvl: calculateSkill((firstMember['experience_skill_foraging'] as num?)?.toDouble()),
+      fishingLvl: calculateSkill((firstMember['experience_skill_fishing'] as num?)?.toDouble()),
+      enchantingLvl: calculateSkill((firstMember['experience_skill_enchanting'] as num?)?.toDouble()),
+      alchemyLvl: calculateSkill((firstMember['experience_skill_alchemy'] as num?)?.toDouble()),
+      tamingLvl: calculateSkill((firstMember['experience_skill_taming'] as num?)?.toDouble()),
+      carpentryLvl: calculateSkill((firstMember['experience_skill_carpentry'] as num?)?.toDouble()),
+      runecraftingLvl: calculateSkill((firstMember['experience_skill_runecrafting'] as num?)?.toDouble()),
+      socialLvl: calculateSkill((firstMember['experience_skill_social2'] as num?)?.toDouble()),
+      catacombsLvl: calculateSkill((firstMember['dungeons']?['dungeon_types']?['catacombs']?['experience'] as num?)?.toDouble()),
       talismans: [], // Requires NBT decoding for real data
       talismanCount: talismanBag != null ? 1 : 0, // Simplified placeholder
       pets: [], // Requires parsing for real data
+      slayers: SlayerProgress(
+        zombie: getSlayerLvl('zombie'),
+        spider: getSlayerLvl('spider'),
+        wolf: getSlayerLvl('wolf'),
+        enderman: getSlayerLvl('enderman'),
+        blaze: getSlayerLvl('blaze'),
+        vampire: getSlayerLvl('vampire'),
+      ),
       isActive: json['selected'] ?? false,
     );
   }
@@ -104,18 +171,18 @@ class SkyblockProfile {
       cuteName: 'Cucumber',
       data: {},
       skyblockLevel: 150.0,
-      combatLvl: 45,
-      miningLvl: 42,
-      farmingLvl: 38,
-      foragingLvl: 30,
-      fishingLvl: 28,
-      enchantingLvl: 55,
-      alchemyLvl: 50,
-      tamingLvl: 40,
-      catacombsLvl: 35,
-      carpentryLvl: 50,
-      runecraftingLvl: 25,
-      socialLvl: 15,
+      combatLvl: Skill(level: 45, currentXp: 750000, maxXp: 1000000),
+      miningLvl: Skill(level: 42, currentXp: 120000, maxXp: 1000000),
+      farmingLvl: Skill(level: 38, currentXp: 900000, maxXp: 1000000),
+      foragingLvl: Skill(level: 30, currentXp: 50000, maxXp: 1000000),
+      fishingLvl: Skill(level: 28, currentXp: 660000, maxXp: 1000000),
+      enchantingLvl: Skill(level: 55, currentXp: 440000, maxXp: 1000000),
+      alchemyLvl: Skill(level: 50, currentXp: 200000, maxXp: 1000000),
+      tamingLvl: Skill(level: 40, currentXp: 850000, maxXp: 1000000),
+      catacombsLvl: Skill(level: 35, currentXp: 500000, maxXp: 1000000),
+      carpentryLvl: Skill(level: 50, currentXp: 100000, maxXp: 1000000),
+      runecraftingLvl: Skill(level: 25, currentXp: 950000, maxXp: 1000000),
+      socialLvl: Skill(level: 15, currentXp: 330000, maxXp: 1000000),
       talismans: [
         'Hegemony Artifact', 'Auto-Recombobulator', 'Wither Artifact', 'Seal of the Family',
         'End Game Artifact', 'Ender Artifact', 'Bat Artifact', 'Cheetah Talisman',
@@ -162,6 +229,14 @@ class SkyblockProfile {
           skills: ['Stronger Bones', 'Wither Resistance', 'Death\'s Touch'],
         ),
       ],
+      slayers: SlayerProgress(
+        zombie: 8,
+        spider: 7,
+        wolf: 7,
+        enderman: 6,
+        blaze: 3,
+        vampire: 5,
+      ),
       isActive: true,
     );
   }

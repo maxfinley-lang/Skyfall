@@ -31,7 +31,7 @@ class StatRow extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildValueContainer(
-                  'You: $valueA',
+                  'You: ${valueA.toInt()}',
                   aWins ? Colors.green : (bWins ? Colors.red : Colors.grey),
                 ),
               ),
@@ -40,7 +40,7 @@ class StatRow extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: _buildValueContainer(
-                  'Opponent: $valueB',
+                  'Opponent: ${valueB.toInt()}',
                   bWins ? Colors.green : (aWins ? Colors.red : Colors.grey),
                 ),
               ),

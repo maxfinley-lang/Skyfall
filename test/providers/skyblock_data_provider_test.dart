@@ -41,9 +41,18 @@ void main() {
         cuteName: 'Apple',
         isActive: true,
         data: {'selected': true},
-        combatLvl: 10,
-        miningLvl: 20,
-        catacombsLvl: 5,
+        combatLvl: Skill(level: 10, currentXp: 0, maxXp: 1000000),
+        miningLvl: Skill(level: 20, currentXp: 0, maxXp: 1000000),
+        farmingLvl: Skill(level: 0, currentXp: 0, maxXp: 1000000),
+        foragingLvl: Skill(level: 0, currentXp: 0, maxXp: 1000000),
+        fishingLvl: Skill(level: 0, currentXp: 0, maxXp: 1000000),
+        enchantingLvl: Skill(level: 0, currentXp: 0, maxXp: 1000000),
+        alchemyLvl: Skill(level: 0, currentXp: 0, maxXp: 1000000),
+        tamingLvl: Skill(level: 0, currentXp: 0, maxXp: 1000000),
+        catacombsLvl: Skill(level: 5, currentXp: 0, maxXp: 1000000),
+        carpentryLvl: Skill(level: 0, currentXp: 0, maxXp: 1000000),
+        runecraftingLvl: Skill(level: 0, currentXp: 0, maxXp: 1000000),
+        socialLvl: Skill(level: 0, currentXp: 0, maxXp: 1000000),
       );
 
       when(() => mockService.getProfiles('some-uuid', 'valid-key'))

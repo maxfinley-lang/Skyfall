@@ -67,7 +67,14 @@ class ProfileDetailScreen extends StatelessWidget {
             child: Column(
               children: entries.entries.map((e) {
                 final val = e.value;
-                String displayVal = val.toString();
+                String displayVal = '0';
+                if (val is Skill) {
+                  displayVal = val.level.toString();
+                } else if (val is double) {
+                  displayVal = val.toInt().toString();
+                } else {
+                  displayVal = val.toString();
+                }
                 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),

@@ -59,6 +59,28 @@ class DashboardScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 24),
+                const Text(
+                  'Slayers',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 3,
+                  children: [
+                    _buildSlayerCard('Revenant', activeProfile.slayers.zombie, Icons.sentiment_very_dissatisfied),
+                    _buildSlayerCard('Tarantula', activeProfile.slayers.spider, Icons.bug_report),
+                    _buildSlayerCard('Sven', activeProfile.slayers.wolf, Icons.pets),
+                    _buildSlayerCard('Voidgloom', activeProfile.slayers.enderman, Icons.visibility),
+                    _buildSlayerCard('Inferno', activeProfile.slayers.blaze, Icons.local_fire_department),
+                    _buildSlayerCard('Riftstalker', activeProfile.slayers.vampire, Icons.bloodtype),
+                  ],
+                ),
+                const SizedBox(height: 24),
                 _buildPetsSection(context, activeProfile),
                 const SizedBox(height: 24),
                 _buildAccessoryBag(context, activeProfile),
@@ -301,25 +323,84 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSkillCard(String skill, int level, IconData icon) {
+  Widget _buildSkillCard(String skillName, Skill skill, IconData icon) {
+    String formatXp(double xp) {
+      if (xp >= 1000000) return '${(xp / 1000000).toStringAsFixed(1)}M';
+      if (xp >= 1000) return '${(xp / 1000).toStringAsFixed(1)}k';
+      return xp.toInt().toString();
+    }
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: Colors.deepPurple, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    skillName,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Text(
+                  'Lvl ${skill.level}',
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(2),
+              child: LinearProgressIndicator(
+                value: skill.progress,
+                minHeight: 4,
+                backgroundColor: Colors.grey[200],
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              '${formatXp(skill.currentXp)} / ${formatXp(skill.maxXp)}',
+              style: TextStyle(fontSize: 9, color: Colors.grey[600]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSlayerCard(String boss, int level, IconData icon) {
     return Card(
       margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
         child: Row(
           children: [
-            Icon(icon, color: Colors.deepPurple, size: 20),
+            Icon(icon, color: Colors.redAccent, size: 20),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                skill,
+                boss,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               ),
             ),
-            Text(
-              'Lvl $level',
-              style: const TextStyle(fontSize: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: level == 9 ? Colors.red : Colors.grey[800],
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                '$level',
+                style: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
