@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/navigation_provider.dart';
+import '../providers/current_user_provider.dart';
 import 'dashboard/dashboard_screen.dart';
 import 'compare/compare_screen.dart';
 
@@ -19,6 +20,12 @@ class MainNavigator extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedIndex == 0 ? 'SkyBlock Dashboard' : 'Compare Stats'),
+        actions: [
+          IconButton(
+            onPressed: () => ref.read(currentUserProvider.notifier).setUuid(null),
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
       body: IndexedStack(
         index: selectedIndex,

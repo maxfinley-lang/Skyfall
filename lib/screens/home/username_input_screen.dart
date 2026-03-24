@@ -31,12 +31,6 @@ class _UsernameInputScreenState extends ConsumerState<UsernameInputScreen> {
 
       if (uuid != null) {
         ref.read(currentUserProvider.notifier).setUuid(uuid);
-        if (mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MainNavigator()),
-          );
-        }
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(

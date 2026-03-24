@@ -4,7 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'theme.dart';
 import 'screens/main_navigator.dart';
+import 'screens/home/username_input_screen.dart';
 import 'providers/profile_provider.dart';
+import 'providers/current_user_provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -35,17 +37,20 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final uuid = ref.watch(currentUserProvider);
+
     return MaterialApp(
       title: 'SkyFall',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const MainNavigator(),
+      debugShowCheckedModeBanner: false,
+      home: uuid == null ? const UsernameInputScreen() : const MainNavigator(),
     );
   }
 }
