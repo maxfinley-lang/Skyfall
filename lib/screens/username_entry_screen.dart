@@ -91,10 +91,22 @@ class _UsernameEntryScreenState extends ConsumerState<UsernameEntryScreen> {
       final uuid = await mojangService.getUuid(username);
 
       if (uuid != null) {
-        // First set the UUID
-        ref.read(currentUserProvider.notifier).setUuid(uuid);
-        // Then set credentials (this will trigger the home screen switch in MyApp)
-        await ref.read(credentialsProvider.notifier).setCredentials(username, apiKey);
+        // Step 2.1.1: Validate API Key by fetching player data
+        final hypixelService = ref.read(hypixelApiServiceProvider);
+        final player = await hypixelService.getPlayer(uuid, apiKey);
+
+        if (player != null) {
+          // First set the UUID
+          ref.read(currentUserProvider.notifier).setUuid(uuid);
+          // Then set credentials (this will trigger the home screen switch in MyApp)
+          await ref.read(credentialsProvider.notifier).setCredentials(username, apiKey);
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Could not fetch player data. Is your API key correct?')),
+            );
+          }
+        }
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(

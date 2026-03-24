@@ -23,7 +23,7 @@ void main() {
         }
       };
 
-      final profile = SkyblockProfile.fromJson(json);
+      final profile = SkyblockProfile.fromJson(json, 'uuid_1');
 
       expect(profile.profileId, '12345');
       expect(profile.cuteName, 'Apple');
@@ -39,7 +39,7 @@ void main() {
         'cute_name': 'Banana',
       };
 
-      final profile = SkyblockProfile.fromJson(json);
+      final profile = SkyblockProfile.fromJson(json, 'some_uuid');
 
       expect(profile.profileId, '67890');
       expect(profile.cuteName, 'Banana');

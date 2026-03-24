@@ -42,7 +42,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final credentials = ref.watch(credentialsProvider);
+    final uuid = ref.watch(currentUserProvider);
 
     return MaterialApp(
       title: 'SkyFall',
@@ -50,7 +50,7 @@ class MyApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: !credentials.isValid ? const UsernameEntryScreen() : const MainNavigator(),
+      home: uuid == null ? const UsernameInputScreen() : const MainNavigator(),
     );
   }
 }

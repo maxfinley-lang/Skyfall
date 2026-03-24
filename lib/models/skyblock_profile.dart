@@ -93,7 +93,7 @@ class SkyblockProfile {
     this.isActive = false,
   }) : slayers = slayers ?? SlayerProgress();
 
-  factory SkyblockProfile.fromJson(Map<String, dynamic> json) {
+  factory SkyblockProfile.fromJson(Map<String, dynamic> json, String targetUuid) {
     // Basic level calculation
     Skill calculateSkill(double? totalXp) {
       if (totalXp == null) return Skill(level: 0, currentXp: 0, maxXp: 1000000);
@@ -110,13 +110,16 @@ class SkyblockProfile {
     }
 
     final members = json['members'] as Map<String, dynamic>? ?? {};
-    final firstMember = members.isNotEmpty ? members.values.first as Map<String, dynamic> : {};
+    // Normalize targetUuid (Mojang API usually gives without dashes)
+    final normalizedUuid = targetUuid.replaceAll('-', '');
+    final targetMember = members[normalizedUuid] as Map<String, dynamic>? ?? 
+                        (members.isNotEmpty ? members.values.first as Map<String, dynamic> : {});
     
     // For MVP, we'll try to get the count from the bag if it exists as a simple field,
     // though usually it requires NBT parsing. We'll use a fallback for now.
-    final talismanBag = firstMember['talisman_bag'] as Map<String, dynamic>?;
+    final talismanBag = targetMember['talisman_bag'] as Map<String, dynamic>?;
 
-    final slayerData = firstMember['slayer_bosses'] as Map<String, dynamic>? ?? {};
+    final slayerData = targetMember['slayer_bosses'] as Map<String, dynamic>? ?? {};
     
     int getSlayerLvl(String boss) {
       final xp = slayerData[boss]?['xp'] as num? ?? 0;
@@ -133,7 +136,7 @@ class SkyblockProfile {
       return 0;
     }
 
-    final petsList = (firstMember['pets'] as List<dynamic>? ?? []).map((p) {
+    final petsList = (targetMember['pets'] as List<dynamic>? ?? []).map((p) {
       final petMap = p as Map<String, dynamic>;
       return Pet(
         name: petMap['type']?.toString().replaceAll('_', ' ') ?? 'Unknown Pet',
@@ -148,21 +151,21 @@ class SkyblockProfile {
       profileId: json['profile_id'] ?? '',
       cuteName: json['cute_name'] ?? 'Unknown',
       data: json,
-      skyblockLevel: (firstMember['leveling']?['experience'] as num? ?? 0) / 100.0,
-      combatLvl: calculateSkill((firstMember['experience_skill_combat'] as num?)?.toDouble()),
-      miningLvl: calculateSkill((firstMember['experience_skill_mining'] as num?)?.toDouble()),
-      farmingLvl: calculateSkill((firstMember['experience_skill_farming'] as num?)?.toDouble()),
-      foragingLvl: calculateSkill((firstMember['experience_skill_foraging'] as num?)?.toDouble()),
-      fishingLvl: calculateSkill((firstMember['experience_skill_fishing'] as num?)?.toDouble()),
-      enchantingLvl: calculateSkill((firstMember['experience_skill_enchanting'] as num?)?.toDouble()),
-      alchemyLvl: calculateSkill((firstMember['experience_skill_alchemy'] as num?)?.toDouble()),
-      tamingLvl: calculateSkill((firstMember['experience_skill_taming'] as num?)?.toDouble()),
-      carpentryLvl: calculateSkill((firstMember['experience_skill_carpentry'] as num?)?.toDouble()),
-      runecraftingLvl: calculateSkill((firstMember['experience_skill_runecrafting'] as num?)?.toDouble()),
-      socialLvl: calculateSkill((firstMember['experience_skill_social2'] as num?)?.toDouble()),
-      catacombsLvl: calculateSkill((firstMember['dungeons']?['dungeon_types']?['catacombs']?['experience'] as num?)?.toDouble()),
+      skyblockLevel: (targetMember['leveling']?['experience'] as num? ?? 0) / 100.0,
+      combatLvl: calculateSkill((targetMember['experience_skill_combat'] as num?)?.toDouble()),
+      miningLvl: calculateSkill((targetMember['experience_skill_mining'] as num?)?.toDouble()),
+      farmingLvl: calculateSkill((targetMember['experience_skill_farming'] as num?)?.toDouble()),
+      foragingLvl: calculateSkill((targetMember['experience_skill_foraging'] as num?)?.toDouble()),
+      fishingLvl: calculateSkill((targetMember['experience_skill_fishing'] as num?)?.toDouble()),
+      enchantingLvl: calculateSkill((targetMember['experience_skill_enchanting'] as num?)?.toDouble()),
+      alchemyLvl: calculateSkill((targetMember['experience_skill_alchemy'] as num?)?.toDouble()),
+      tamingLvl: calculateSkill((targetMember['experience_skill_taming'] as num?)?.toDouble()),
+      carpentryLvl: calculateSkill((targetMember['experience_skill_carpentry'] as num?)?.toDouble()),
+      runecraftingLvl: calculateSkill((targetMember['experience_skill_runecrafting'] as num?)?.toDouble()),
+      socialLvl: calculateSkill((targetMember['experience_skill_social2'] as num?)?.toDouble()),
+      catacombsLvl: calculateSkill((targetMember['dungeons']?['dungeon_types']?['catacombs']?['experience'] as num?)?.toDouble()),
       talismans: [], // Note: Real talismans require NBT parsing
-      talismanCount: (firstMember['talisman_bag']?['bag_size'] as num? ?? 0).toInt(),
+      talismanCount: (targetMember['talisman_bag']?['bag_size'] as num? ?? 0).toInt(),
       pets: petsList,
       slayers: SlayerProgress(
         zombie: getSlayerLvl('zombie'),

@@ -53,7 +53,7 @@ class HypixelApiService {
           final List<dynamic> profilesList = jsonResponse['profiles'];
           
           return profilesList.map((profileData) {
-            return SkyblockProfile.fromJson(profileData as Map<String, dynamic>);
+            return SkyblockProfile.fromJson(profileData as Map<String, dynamic>, uuid);
           }).toList();
         } else {
           throw Exception('Hypixel API Error: ${jsonResponse['cause'] ?? 'Unknown error'}\nResponse: ${response.body}');

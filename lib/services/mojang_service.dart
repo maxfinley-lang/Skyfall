@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class MojangService {
-  static const String _baseUrl = 'https://playerdb.co/api/player/minecraft';
+  static const String _baseUrl = 'https://api.mojang.com/users/profiles/minecraft';
   final http.Client _client;
 
   MojangService({http.Client? client}) : _client = client ?? http.Client();
@@ -13,17 +13,14 @@ class MojangService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        if (data['success'] == true) {
-          return data['data']['player']['id'] as String?;
-        }
-        return null;
-      } else if (response.statusCode == 404) {
+        return data['id'] as String?;
+      } else if (response.statusCode == 404 || response.statusCode == 204) {
         return null;
       } else {
-        throw Exception('Failed to fetch UUID from PlayerDB: ${response.statusCode}');
+        throw Exception('Failed to fetch UUID from Mojang: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Error connecting to UUID API: $e');
+      throw Exception('Error connecting to Mojang API: $e');
     }
   }
 }

@@ -42,4 +42,8 @@ Follow these instructions for writing code for my project:
 
 26 [X] implement step 2.1.1 from REQUIRMENTS.md
 
-27 [ ] implement step 2.1.2 from REQUIRMENTS.md
+27 [X] make sure step 2.1.1 from phase 2 in REQUIRMENTS.md is correctly implemented
+
+28 [ ] create new testfiles to test api fetching, and debug / fix all problems
+
+29 [ ] implement step 2.1.2 from REQUIRMENTS.md

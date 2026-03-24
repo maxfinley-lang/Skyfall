@@ -22,7 +22,7 @@ void main() {
     test('getUuid should return UUID for valid username', () async {
       final username = 'test_user';
       final uuid = '1234567890';
-      final responseBody = '{"success": true, "data": {"player": {"id": "$uuid", "username": "$username"}}}';
+      final responseBody = '{"id": "$uuid", "name": "$username"}';
 
       when(() => mockHttpClient.get(any())).thenAnswer(
         (_) async => http.Response(responseBody, 200),
@@ -33,11 +33,11 @@ void main() {
       expect(result, uuid);
     });
 
-    test('getUuid should return null for 404 response', () async {
+    test('getUuid should return null for 204 response', () async {
       final username = 'invalid_user';
 
       when(() => mockHttpClient.get(any())).thenAnswer(
-        (_) async => http.Response('Not Found', 404),
+        (_) async => http.Response('', 204),
       );
 
       final result = await mojangService.getUuid(username);
