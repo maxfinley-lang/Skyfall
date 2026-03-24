@@ -12,9 +12,7 @@ class DashboardScreen extends ConsumerWidget {
     final uuid = ref.watch(currentUserProvider);
 
     if (uuid == null) {
-      return const Scaffold(
-        body: Center(child: Text('Please log in first.')),
-      );
+      return const Center(child: Text('Please log in first.'));
     }
 
     final profileAsync = ref.watch(skyblockDataProvider(uuid));

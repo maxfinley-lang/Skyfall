@@ -32,7 +32,7 @@ void main() {
         ]
       });
 
-      when(() => client.get(any())).thenAnswer(
+      when(() => client.get(any(), headers: any(named: 'headers'))).thenAnswer(
         (_) async => http.Response(responseBody, 200),
       );
 
@@ -51,7 +51,7 @@ void main() {
         'cause': 'Invalid API Key',
       });
 
-      when(() => client.get(any())).thenAnswer(
+      when(() => client.get(any(), headers: any(named: 'headers'))).thenAnswer(
         (_) async => http.Response(responseBody, 200),
       );
 
@@ -59,11 +59,43 @@ void main() {
     });
 
     test('getProfiles should throw exception on non-200 response', () async {
-      when(() => client.get(any())).thenAnswer(
+      when(() => client.get(any(), headers: any(named: 'headers'))).thenAnswer(
         (_) async => http.Response('Error', 500),
       );
 
       expect(() => service.getProfiles(uuid, apiKey), throwsException);
+    });
+
+    test('getPlayer should return player data for valid UUID', () async {
+      final responseBody = jsonEncode({
+        'success': true,
+        'player': {
+          'uuid': uuid,
+          'displayname': 'TestPlayer',
+        }
+      });
+
+      when(() => client.get(any(), headers: any(named: 'headers'))).thenAnswer(
+        (_) async => http.Response(responseBody, 200),
+      );
+
+      final result = await service.getPlayer(uuid, apiKey);
+
+      expect(result?['displayname'], 'TestPlayer');
+      expect(result?['uuid'], uuid);
+    });
+
+    test('getPlayer should throw exception on Hypixel error', () async {
+      final responseBody = jsonEncode({
+        'success': false,
+        'cause': 'Invalid API Key',
+      });
+
+      when(() => client.get(any(), headers: any(named: 'headers'))).thenAnswer(
+        (_) async => http.Response(responseBody, 200),
+      );
+
+      expect(() => service.getPlayer(uuid, apiKey), throwsException);
     });
   });
 }

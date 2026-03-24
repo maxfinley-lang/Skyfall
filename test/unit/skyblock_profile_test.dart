@@ -28,9 +28,9 @@ void main() {
       expect(profile.profileId, '12345');
       expect(profile.cuteName, 'Apple');
       expect(profile.isActive, true);
-      expect(profile.combatLvl, 1); // 1.5M / 1M = 1
-      expect(profile.miningLvl, 5); // 5M / 1M = 5
-      expect(profile.catacombsLvl, 250000);
+      expect(profile.combatLvl.level, 1); // 1.5M / 1M = 1
+      expect(profile.miningLvl.level, 5); // 5M / 1M = 5
+      expect(profile.catacombsLvl.level, 0); // 250k / 1M = 0
     });
 
     test('fromJson should handle null or missing fields', () {
@@ -44,9 +44,9 @@ void main() {
       expect(profile.profileId, '67890');
       expect(profile.cuteName, 'Banana');
       expect(profile.isActive, false);
-      expect(profile.combatLvl, 0);
-      expect(profile.miningLvl, 0);
-      expect(profile.catacombsLvl, 0);
+      expect(profile.combatLvl.level, 0);
+      expect(profile.miningLvl.level, 0);
+      expect(profile.catacombsLvl.level, 0);
     });
   });
 }

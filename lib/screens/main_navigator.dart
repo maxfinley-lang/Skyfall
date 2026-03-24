@@ -20,7 +20,10 @@ class MainNavigator extends ConsumerWidget {
       appBar: AppBar(
         title: Text(selectedIndex == 0 ? 'SkyBlock Dashboard' : 'Compare Stats'),
       ),
-      body: pages[selectedIndex],
+      body: IndexedStack(
+        index: selectedIndex,
+        children: pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) => ref.read(navigationProvider.notifier).setIndex(index),

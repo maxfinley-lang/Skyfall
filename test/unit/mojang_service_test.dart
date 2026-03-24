@@ -22,7 +22,7 @@ void main() {
     test('getUuid should return UUID for valid username', () async {
       final username = 'test_user';
       final uuid = '1234567890';
-      final responseBody = '{"id": "$uuid", "name": "$username"}';
+      final responseBody = '{"success": true, "data": {"player": {"id": "$uuid", "username": "$username"}}}';
 
       when(() => mockHttpClient.get(any())).thenAnswer(
         (_) async => http.Response(responseBody, 200),
