@@ -22,7 +22,10 @@ class MainNavigator extends ConsumerWidget {
         title: Text(selectedIndex == 0 ? 'SkyBlock Dashboard' : 'Compare Stats'),
         actions: [
           IconButton(
-            onPressed: () => ref.read(currentUserProvider.notifier).setUuid(null),
+            onPressed: () {
+              ref.read(currentUserProvider.notifier).setUuid(null);
+              ref.read(credentialsProvider.notifier).logout();
+            },
             icon: const Icon(Icons.logout),
           ),
         ],

@@ -64,7 +64,7 @@ final skyblockProfilesProvider = FutureProvider<List<SkyblockProfile>>((ref) asy
   final apiKey = ref.watch(apiKeyProvider).trim();
   
   if (uuid == null || apiKey.isEmpty) {
-    return [SkyblockProfile.mock()];
+    throw Exception('UUID or API Key is missing.');
   }
   
   final service = ref.watch(hypixelApiServiceProvider);
@@ -74,7 +74,7 @@ final skyblockProfilesProvider = FutureProvider<List<SkyblockProfile>>((ref) asy
     final profiles = await service.getProfiles(uuid, apiKey);
     
     if (profiles.isEmpty) {
-      return [SkyblockProfile.mock()];
+      return [];
     }
 
     // Save to Firestore so other users can see/compare (Step 2.4)
@@ -85,7 +85,7 @@ final skyblockProfilesProvider = FutureProvider<List<SkyblockProfile>>((ref) asy
     
     return profiles;
   } catch (e) {
-    return [SkyblockProfile.mock()];
+    rethrow;
   }
 });
 

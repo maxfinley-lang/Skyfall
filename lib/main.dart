@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'theme.dart';
 import 'screens/main_navigator.dart';
-import 'screens/home/username_input_screen.dart';
+import 'screens/username_entry_screen.dart';
 import 'providers/profile_provider.dart';
 import 'providers/current_user_provider.dart';
 import 'firebase_options.dart';
@@ -42,7 +42,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final uuid = ref.watch(currentUserProvider);
+    final credentials = ref.watch(credentialsProvider);
 
     return MaterialApp(
       title: 'SkyFall',
@@ -50,7 +50,7 @@ class MyApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: uuid == null ? const UsernameInputScreen() : const MainNavigator(),
+      home: !credentials.isValid ? const UsernameEntryScreen() : const MainNavigator(),
     );
   }
 }

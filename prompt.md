@@ -40,6 +40,6 @@ Follow these instructions for writing code for my project:
 
 25 [X] add exp bars and the numbers associated with how much exp the user has in that skill out of total until next level up
 
-26 [ ] implement step 2.1.1 from REQUIRMENTS.md
+26 [X] implement step 2.1.1 from REQUIRMENTS.md
 
 27 [ ] implement step 2.1.2 from REQUIRMENTS.md

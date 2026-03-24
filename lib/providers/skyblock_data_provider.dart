@@ -23,7 +23,7 @@ final skyblockDataProvider = FutureProvider.family<SkyblockProfile, String>((ref
     final profiles = await service.getProfiles(uuid, apiKey);
 
     if (profiles.isEmpty) {
-      return SkyblockProfile.mock();
+      throw Exception('No SkyBlock profiles found for this user.');
     }
 
     // Auto-select the active profile (Step 2.2 logic integrated here)
@@ -32,7 +32,7 @@ final skyblockDataProvider = FutureProvider.family<SkyblockProfile, String>((ref
       orElse: () => profiles.first,
     );
   } catch (e) {
-    debugPrint('ERROR: Failed to fetch profiles from Hypixel, using mock fallback: $e');
-    return SkyblockProfile.mock();
+    debugPrint('ERROR: Failed to fetch profiles from Hypixel: $e');
+    rethrow;
   }
 });

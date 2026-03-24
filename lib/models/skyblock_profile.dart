@@ -132,6 +132,17 @@ class SkyblockProfile {
       if (xp >= 5) return 1;
       return 0;
     }
+
+    final petsList = (firstMember['pets'] as List<dynamic>? ?? []).map((p) {
+      final petMap = p as Map<String, dynamic>;
+      return Pet(
+        name: petMap['type']?.toString().replaceAll('_', ' ') ?? 'Unknown Pet',
+        rarity: petMap['tier']?.toString() ?? 'COMMON',
+        level: (petMap['exp'] as num? ?? 0) ~/ 100000, // Very simplified level
+        skills: [], // Requires more complex parsing or static data
+        active: petMap['active'] ?? false,
+      );
+    }).toList();
     
     return SkyblockProfile(
       profileId: json['profile_id'] ?? '',
@@ -150,9 +161,9 @@ class SkyblockProfile {
       runecraftingLvl: calculateSkill((firstMember['experience_skill_runecrafting'] as num?)?.toDouble()),
       socialLvl: calculateSkill((firstMember['experience_skill_social2'] as num?)?.toDouble()),
       catacombsLvl: calculateSkill((firstMember['dungeons']?['dungeon_types']?['catacombs']?['experience'] as num?)?.toDouble()),
-      talismans: [], // Requires NBT decoding for real data
-      talismanCount: talismanBag != null ? 1 : 0, // Simplified placeholder
-      pets: [], // Requires parsing for real data
+      talismans: [], // Note: Real talismans require NBT parsing
+      talismanCount: (firstMember['talisman_bag']?['bag_size'] as num? ?? 0).toInt(),
+      pets: petsList,
       slayers: SlayerProgress(
         zombie: getSlayerLvl('zombie'),
         spider: getSlayerLvl('spider'),
