@@ -44,6 +44,8 @@ Follow these instructions for writing code for my project:
 
 27 [X] make sure step 2.1.1 from phase 2 in REQUIRMENTS.md is correctly implemented
 
-28 [ ] create new testfiles to test api fetching, and debug / fix all problems
+28 [X] create new testfiles to test api fetching, and debug
 
-29 [ ] implement step 2.1.2 from REQUIRMENTS.md
+29 [ ] remove redundant code / code not being used
+
+30 [ ] ensure step 2.1.1 from phase 2 in REQUIRMENTS.md is correctly implemented and all api settings are from that example

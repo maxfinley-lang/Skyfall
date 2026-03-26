@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'theme.dart';
 import 'screens/main_navigator.dart';
-import 'screens/username_entry_screen.dart';
+import 'screens/home/username_input_screen.dart';
 import 'providers/profile_provider.dart';
 import 'providers/current_user_provider.dart';
 import 'firebase_options.dart';

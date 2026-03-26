@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/navigation_provider.dart';
 import '../providers/current_user_provider.dart';
-import '../providers/profile_provider.dart';
 import 'dashboard/dashboard_screen.dart';
 import 'compare/compare_screen.dart';
 

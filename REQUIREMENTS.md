@@ -34,9 +34,9 @@ Goal: A functional read-only dashboard using live Hypixel data.
 Step 2.1: User Identification (Username to UUID)
 Dependencies: Add http and flutter_dotenv to pubspec.yaml.
 
-Step 2.1.1 API Key Setup: reference: https://github.com/HypixelDev/PublicAPI/blob/master/hypixel-api-example/src/main/java/net/hypixel/api/example/skyblock/GetProfileExample.java
+Step 2.1.1 API Key Setup: use this reference to grab user info for skyblock: https://github.com/HypixelDev/PublicAPI/blob/master/hypixel-api-example/src/main/java/net/hypixel/api/example/skyblock/GetProfileExample.java
 for player data
-Step 2.1.2: https://github.com/HypixelDev/PublicAPI/blob/master/hypixel-api-example/src/main/java/net/hypixel/api/example/skyblock/GetProfilesExample.java
+Step 2.1.2: api setup for looking at other profiles: https://github.com/HypixelDev/PublicAPI/blob/master/hypixel-api-example/src/main/java/net/hypixel/api/example/skyblock/GetProfilesExample.java
 for all other profiles
 
 Mojang Service:
