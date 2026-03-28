@@ -1,13 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // Add this import
 import '../services/hypixel_api_service.dart';
 import '../services/firestore_service.dart';
+import '../services/mojang_service.dart'; // Add this import
+
 import '../models/skyblock_profile.dart';
 import 'current_user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final hypixelApiServiceProvider = Provider((ref) => HypixelApiService());
 final firestoreServiceProvider = Provider((ref) => FirestoreService());
+final mojangServiceProvider = Provider((ref) => MojangService()); // Add this provider
 
 final apiKeyProvider = Provider<String>((ref) {
   final credentials = ref.watch(credentialsProvider);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/current_user_provider.dart';
+import '../../providers/profile_provider.dart';
+
 
 class UsernameInputScreen extends ConsumerStatefulWidget {
   const UsernameInputScreen({super.key});

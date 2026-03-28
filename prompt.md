@@ -46,6 +46,6 @@ Follow these instructions for writing code for my project:
 
 28 [X] create new testfiles to test api fetching, and debug
 
-29 [ ] remove redundant code / code not being used
+29 [X] remove redundant code / code not being used
 
-30 [ ] ensure step 2.1.1 from phase 2 in REQUIRMENTS.md is correctly implemented and all api settings are from that example
+30 [X] ensure step 2.1.1 from phase 2 in REQUIRMENTS.md is correctly implemented and all api settings are from that example

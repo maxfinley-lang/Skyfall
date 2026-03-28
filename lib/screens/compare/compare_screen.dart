@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/current_user_provider.dart';
 import '../../providers/skyblock_data_provider.dart';
+import '../../providers/profile_provider.dart'; // Add this import
 import '../../widgets/stat_row.dart';
 
 class CompareScreen extends ConsumerStatefulWidget {
