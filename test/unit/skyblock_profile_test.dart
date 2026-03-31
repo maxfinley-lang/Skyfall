@@ -31,6 +31,10 @@ void main() {
       expect(profile.combatLvl.level, 22); // Based on CUMULATIVE_XP_NEEDED
       expect(profile.miningLvl.level, 27); // Based on CUMULATIVE_XP_NEEDED
       expect(profile.catacombsLvl.level, 18); // Based on CUMULATIVE_XP_NEEDED
+      expect(profile.purse, 0);
+      expect(profile.bank, 0);
+      expect(profile.fairySouls, 0);
+      expect(profile.skillAverage, closeTo(4.45, 0.01));
     });
 
     test('fromJson should handle null or missing fields', () {
@@ -47,6 +51,10 @@ void main() {
       expect(profile.combatLvl.level, 0);
       expect(profile.miningLvl.level, 0);
       expect(profile.catacombsLvl.level, 0);
+      expect(profile.purse, 0);
+      expect(profile.bank, 0);
+      expect(profile.fairySouls, 0);
+      expect(profile.skillAverage, 0);
     });
   });
 }

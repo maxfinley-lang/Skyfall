@@ -61,6 +61,10 @@ class SkyblockProfile {
   final String cuteName;
   final Map<String, dynamic> data;
   final double skyblockLevel;
+  final double purse;
+  final double bank;
+  final int fairySouls;
+  final double skillAverage;
   final Skill combatLvl;
   final Skill miningLvl;
   final Skill farmingLvl;
@@ -84,6 +88,10 @@ class SkyblockProfile {
     required this.cuteName,
     required this.data,
     this.skyblockLevel = 0,
+    this.purse = 0,
+    this.bank = 0,
+    this.fairySouls = 0,
+    this.skillAverage = 0,
     required this.combatLvl,
     required this.miningLvl,
     required this.farmingLvl,
@@ -169,24 +177,45 @@ class SkyblockProfile {
         active: petMap['active'] ?? false,
       );
     }).toList();
+
+    final combat = calculateSkill((targetMember['experience_skill_combat'] as num?)?.toDouble());
+    final mining = calculateSkill((targetMember['experience_skill_mining'] as num?)?.toDouble());
+    final farming = calculateSkill((targetMember['experience_skill_farming'] as num?)?.toDouble());
+    final foraging = calculateSkill((targetMember['experience_skill_foraging'] as num?)?.toDouble());
+    final fishing = calculateSkill((targetMember['experience_skill_fishing'] as num?)?.toDouble());
+    final enchanting = calculateSkill((targetMember['experience_skill_enchanting'] as num?)?.toDouble());
+    final alchemy = calculateSkill((targetMember['experience_skill_alchemy'] as num?)?.toDouble());
+    final taming = calculateSkill((targetMember['experience_skill_taming'] as num?)?.toDouble());
+    final carpentry = calculateSkill((targetMember['experience_skill_carpentry'] as num?)?.toDouble());
+    final runecrafting = calculateSkill((targetMember['experience_skill_runecrafting'] as num?)?.toDouble());
+    final social = calculateSkill((targetMember['experience_skill_social2'] as num?)?.toDouble());
+    // Note: Catacombs uses a different XP table usually, but we'll use the same for MVP
+    final catacombs = calculateSkill((targetMember['dungeons']?['dungeon_types']?['catacombs']?['experience'] as num?)?.toDouble());
+
+    final skillList = [combat, mining, farming, foraging, fishing, enchanting, alchemy, taming, carpentry, runecrafting, social];
+    final avg = skillList.map((s) => s.level).reduce((a, b) => a + b) / skillList.length;
     
     return SkyblockProfile(
       profileId: json['profile_id'] ?? '',
       cuteName: json['cute_name'] ?? 'Unknown',
       data: json,
       skyblockLevel: (targetMember['leveling']?['experience'] as num? ?? 0) / 100.0,
-      combatLvl: calculateSkill((targetMember['experience_skill_combat'] as num?)?.toDouble()),
-      miningLvl: calculateSkill((targetMember['experience_skill_mining'] as num?)?.toDouble()),
-      farmingLvl: calculateSkill((targetMember['experience_skill_farming'] as num?)?.toDouble()),
-      foragingLvl: calculateSkill((targetMember['experience_skill_foraging'] as num?)?.toDouble()),
-      fishingLvl: calculateSkill((targetMember['experience_skill_fishing'] as num?)?.toDouble()),
-      enchantingLvl: calculateSkill((targetMember['experience_skill_enchanting'] as num?)?.toDouble()),
-      alchemyLvl: calculateSkill((targetMember['experience_skill_alchemy'] as num?)?.toDouble()),
-      tamingLvl: calculateSkill((targetMember['experience_skill_taming'] as num?)?.toDouble()),
-      carpentryLvl: calculateSkill((targetMember['experience_skill_carpentry'] as num?)?.toDouble()),
-      runecraftingLvl: calculateSkill((targetMember['experience_skill_runecrafting'] as num?)?.toDouble()),
-      socialLvl: calculateSkill((targetMember['experience_skill_social2'] as num?)?.toDouble()),
-      catacombsLvl: calculateSkill((targetMember['dungeons']?['dungeon_types']?['catacombs']?['experience'] as num?)?.toDouble()),
+      purse: (targetMember['coin_purse'] as num? ?? 0).toDouble(),
+      bank: (json['banking']?['balance'] as num? ?? 0).toDouble(),
+      fairySouls: (targetMember['fairy_souls_collected'] as num? ?? 0).toInt(),
+      skillAverage: avg,
+      combatLvl: combat,
+      miningLvl: mining,
+      farmingLvl: farming,
+      foragingLvl: foraging,
+      fishingLvl: fishing,
+      enchantingLvl: enchanting,
+      alchemyLvl: alchemy,
+      tamingLvl: taming,
+      carpentryLvl: carpentry,
+      runecraftingLvl: runecrafting,
+      socialLvl: social,
+      catacombsLvl: catacombs,
       talismans: [], // Note: Real talismans require NBT parsing
       talismanCount: (targetMember['talisman_bag']?['bag_size'] as num? ?? 0).toInt(),
       pets: petsList,
@@ -208,6 +237,10 @@ class SkyblockProfile {
       cuteName: 'Cucumber',
       data: {},
       skyblockLevel: 150.0,
+      purse: 12500000.50,
+      bank: 50000000.0,
+      fairySouls: 242,
+      skillAverage: 42.5,
       combatLvl: Skill(level: 45, currentXp: 750000, maxXp: 1000000),
       miningLvl: Skill(level: 42, currentXp: 120000, maxXp: 1000000),
       farmingLvl: Skill(level: 38, currentXp: 900000, maxXp: 1000000),

@@ -52,4 +52,4 @@ Follow these instructions for writing code for my project:
 
 31 [X] implement step 2.1.2 from phase 2 in REQUIREMENTS.md
 
-32 [ ] loook at step 2.1.3 and implement ideas that that code has, like user profile data grabing through api and its display, as our code currently doesnt list any data
+32 [X] loook at step 2.1.3 and implement ideas that that code has, like user profile data grabing through api and its display, as our code currently doesnt list any data.

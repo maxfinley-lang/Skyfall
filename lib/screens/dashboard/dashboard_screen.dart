@@ -28,6 +28,8 @@ class DashboardScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               children: [
                 _buildHeader(uuid, activeProfile),
+                const SizedBox(height: 16),
+                _buildGeneralStats(activeProfile),
                 const SizedBox(height: 24),
                 const Text(
                   'Skill Levels',
@@ -263,6 +265,57 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
+  Widget _buildGeneralStats(SkyblockProfile profile) {
+    String formatCoins(double coins) {
+      if (coins >= 1000000000) return '${(coins / 1000000000).toStringAsFixed(1)}B';
+      if (coins >= 1000000) return '${(coins / 1000000).toStringAsFixed(1)}M';
+      if (coins >= 1000) return '${(coins / 1000).toStringAsFixed(1)}k';
+      return coins.toInt().toString();
+    }
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildStatItem('Skill Avg', profile.skillAverage.toStringAsFixed(1), Icons.auto_graph),
+                _buildStatItem('Fairy Souls', profile.fairySouls.toString(), Icons.auto_fix_high),
+              ],
+            ),
+            const Divider(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildStatItem('Purse', formatCoins(profile.purse), Icons.account_balance_wallet, color: Colors.amber),
+                _buildStatItem('Bank', formatCoins(profile.bank), Icons.account_balance, color: Colors.amber),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatItem(String label, String value, IconData icon, {Color? color}) {
+    return Column(
+      children: [
+        Icon(icon, color: color ?? Colors.deepPurple, size: 24),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          label,
+          style: TextStyle(color: Colors.grey[600], fontSize: 12),
+        ),
+      ],
+    );
+  }
+
   Widget _buildHeader(String? uuid, SkyblockProfile profile) {
     return Card(
       child: Padding(
@@ -308,8 +361,9 @@ class DashboardScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 4),
                   Text(
-                    'Active Profile',
+                    'Active Profile • Avg Skill ${profile.skillAverage.toStringAsFixed(1)}',
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                 ],
