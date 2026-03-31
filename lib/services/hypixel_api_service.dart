@@ -48,23 +48,17 @@ class HypixelApiService {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        
         if (jsonResponse['success'] == true && jsonResponse['profiles'] != null) {
-          final List<dynamic> profilesList = jsonResponse['profiles'];
+          final List<dynamic> profilesList = jsonResponse['profiles'] as List<dynamic>;
           
           return profilesList.map((profileData) {
             return SkyblockProfile.fromJson(profileData as Map<String, dynamic>, uuid);
           }).toList();
         } else {
-          throw Exception('Hypixel API Error: ${jsonResponse['cause'] ?? 'Unknown error'}\nResponse: ${response.body}');
+          throw Exception('Hypixel API Error: ${jsonResponse['cause'] ?? 'Unknown error'}');
         }
       } else {
-        // Detailed error for 403 (often CORS or API Key)
-        String errorMsg = 'Failed to connect to Hypixel API (Status: ${response.statusCode})\nBody: ${response.body}';
-        if (response.statusCode == 403) {
-          errorMsg += '\nNote: If you are running on Web (Chrome), this might be a CORS block. Consider running as a Desktop/Mobile app or using a proxy.';
-        }
-        throw Exception(errorMsg);
+        throw Exception('Failed to connect to Hypixel API (Status: ${response.statusCode})');
       }
     } catch (e) {
       if (e is Exception) rethrow;

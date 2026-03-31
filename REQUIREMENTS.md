@@ -36,7 +36,11 @@ Dependencies: Add http and flutter_dotenv to pubspec.yaml.
 
 Step 2.1.1 API Key Setup: use this reference to grab user info for skyblock: https://github.com/HypixelDev/PublicAPI/blob/master/hypixel-api-example/src/main/java/net/hypixel/api/example/skyblock/GetProfileExample.java
 for player data
-Step 2.1.2: api setup for looking at other profiles: https://github.com/HypixelDev/PublicAPI/blob/master/hypixel-api-example/src/main/java/net/hypixel/api/example/skyblock/GetProfilesExample.java
+Step 2.1.2: download users information obtained through api login and display it on the dashboard.
+
+Step 2.1.3: reference https://github.com/SkyCryptWebsite/SkyCrypt/tree/development/src for help as this is a working website of what i want mine to look like.
+
+Step 2.1.4: api setup for looking at other profiles: https://github.com/HypixelDev/PublicAPI/blob/master/hypixel-api-example/src/main/java/net/hypixel/api/example/skyblock/GetProfilesExample.java
 for all other profiles
 
 Mojang Service:

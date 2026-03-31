@@ -28,9 +28,9 @@ void main() {
       expect(profile.profileId, '12345');
       expect(profile.cuteName, 'Apple');
       expect(profile.isActive, true);
-      expect(profile.combatLvl.level, 1); // 1.5M / 1M = 1
-      expect(profile.miningLvl.level, 5); // 5M / 1M = 5
-      expect(profile.catacombsLvl.level, 0); // 250k / 1M = 0
+      expect(profile.combatLvl.level, 22); // Based on CUMULATIVE_XP_NEEDED
+      expect(profile.miningLvl.level, 27); // Based on CUMULATIVE_XP_NEEDED
+      expect(profile.catacombsLvl.level, 18); // Based on CUMULATIVE_XP_NEEDED
     });
 
     test('fromJson should handle null or missing fields', () {

@@ -1,0 +1,26 @@
+Launching lib/main.dart on macOS in debug mode...
+Building macOS application...                                   
+✓ Built build/macos/Build/Products/Debug/skyblock.app
+2026-03-27 18:18:07.405 skyblock[43972:537042] Running with merged UI and platform thread. Experimental.
+flutter: Firebase initialization failed: Unsupported operation: Platform not supported.
+Syncing files to device macOS...                                    35ms
+
+Flutter run key commands.
+r Hot reload. 🔥🔥🔥
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+A Dart VM Service on macOS is available at: http://127.0.0.1:61662/sccYiM3QMG4=/
+The Flutter DevTools debugger and profiler on macOS is available at: http://127.0.0.1:61662/sccYiM3QMG4=/devtools/?uri=ws://127.0.0.1:61662/sccYiM3QMG4=/ws
+flutter: DEBUG: Using API Key: 27f5...cdbe for UUID: 0464fa393eb54034950dfcacde20745d
+flutter: DEBUG: Raw Combat XP: null
+flutter: DEBUG: Raw Mining XP: null
+flutter: DEBUG: Raw Combat XP: null
+flutter: DEBUG: Raw Mining XP: null
+flutter: DEBUG: Raw Combat XP: null
+flutter: DEBUG: Raw Mining XP: null
+flutter: DEBUG: Skill calculated - Level: 20, Current XP: 155310.23337791825, Max XP: 300000.0
+Lost connection to device.

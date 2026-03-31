@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:skyblock/screens/home/username_input_screen.dart';
 import 'package:skyblock/services/mojang_service.dart';
 import 'package:skyblock/providers/current_user_provider.dart';
+import 'package:skyblock/providers/profile_provider.dart';
 
 class MockMojangService extends Mock implements MojangService {}
 

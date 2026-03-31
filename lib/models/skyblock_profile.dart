@@ -47,6 +47,16 @@ class Skill {
 }
 
 class SkyblockProfile {
+  static const List<int> CUMULATIVE_XP_NEEDED = [
+    0, 50, 175, 375, 675, 1175, 1925, 2925, 4425, 6425, 9925, 14925, 22425,
+    32425, 47425, 67425, 97425, 147425, 222425, 322425, 522425, 822425, 1222425,
+    1722425, 2322425, 3022425, 3822425, 4722425, 5722425, 6822425, 8022425,
+    9322425, 10722425, 12222425, 13822425, 15522425, 17322425, 19222425,
+    21222425, 23322425, 25522425, 27822425, 30222425, 32722425, 35322425,
+    38072425, 40972425, 44072425, 47472425, 51172425, 55172425, 59472425,
+    64072425, 68972425, 74172425, 79672425, 85472425, 91572425, 97972425,
+    104672425, 111672425
+  ];
   final String profileId;
   final String cuteName;
   final Map<String, dynamic> data;
@@ -94,18 +104,31 @@ class SkyblockProfile {
   }) : slayers = slayers ?? SlayerProgress();
 
   factory SkyblockProfile.fromJson(Map<String, dynamic> json, String targetUuid) {
-    // Basic level calculation
     Skill calculateSkill(double? totalXp) {
-      if (totalXp == null) return Skill(level: 0, currentXp: 0, maxXp: 1000000);
+      if (totalXp == null) return Skill(level: 0, currentXp: 0, maxXp: SkyblockProfile.CUMULATIVE_XP_NEEDED[1].toDouble());
       
-      // For MVP simplicity, every level is 1M XP. 
-      // Real SkyBlock XP tables are complex, but this satisfies the UI requirement.
-      int level = (totalXp / 1000000).floor().clamp(0, 60);
-      double currentXp = totalXp % 1000000;
+      int level = 0;
+      double currentLevelXp = 0;
+      double nextLevelXp = SkyblockProfile.CUMULATIVE_XP_NEEDED[1].toDouble(); // Default for level 0 to 1
+      
+      for (int i = 0; i < SkyblockProfile.CUMULATIVE_XP_NEEDED.length; i++) {
+        if (totalXp >= SkyblockProfile.CUMULATIVE_XP_NEEDED[i]) {
+          level = i;
+          currentLevelXp = totalXp - SkyblockProfile.CUMULATIVE_XP_NEEDED[i];
+          if (i < SkyblockProfile.CUMULATIVE_XP_NEEDED.length - 1) {
+            nextLevelXp = (SkyblockProfile.CUMULATIVE_XP_NEEDED[i+1] - SkyblockProfile.CUMULATIVE_XP_NEEDED[i]).toDouble();
+          } else {
+            nextLevelXp = 0; // Max level reached, no XP to next level
+          }
+        } else {
+          break;
+        }
+      }
+      
       return Skill(
         level: level,
-        currentXp: currentXp,
-        maxXp: 1000000,
+        currentXp: currentLevelXp,
+        maxXp: nextLevelXp == 0 ? currentLevelXp : nextLevelXp, // If max level, maxXp is currentXp
       );
     }
 
@@ -136,7 +159,7 @@ class SkyblockProfile {
       return 0;
     }
 
-    final petsList = (targetMember['pets'] as List<dynamic>? ?? []).map((p) {
+    final petsList = (targetMember['pets_data']?['pets'] as List<dynamic>? ?? []).map((p) {
       final petMap = p as Map<String, dynamic>;
       return Pet(
         name: petMap['type']?.toString().replaceAll('_', ' ') ?? 'Unknown Pet',

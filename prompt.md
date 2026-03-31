@@ -49,3 +49,7 @@ Follow these instructions for writing code for my project:
 29 [X] remove redundant code / code not being used
 
 30 [X] ensure step 2.1.1 from phase 2 in REQUIRMENTS.md is correctly implemented and all api settings are from that example
+
+31 [X] implement step 2.1.2 from phase 2 in REQUIREMENTS.md
+
+32 [ ] loook at step 2.1.3 and implement ideas that that code has, like user profile data grabing through api and its display, as our code currently doesnt list any data
